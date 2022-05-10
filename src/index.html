@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>HTTP-exchange Example</title>
+    </head>
+
+    <body>
+        <header class="header">
+            <h1 class="header__title">
+                Домашнее задание к занятию AHJ-22_7.Работа с HTTP»
+            </h1>
+        </header>
+        <main>
+            <button class="tiket__add" id="tiket__add">Добавить тикет</button>
+            <div class="content">
+                <div class="tasks__list" id="tikets__list"></div>                
+            </div>
+        </main>
+    </body>
+
+    <div class="popup-wrapper display_none" id="Add_Tiket_Form"> <!-- POPUP-ФОРМА "Добавить тикет"-->
+		<div class="popup">
+			<h2 class="popup-title">Добавить тикет</h2>
+			
+				<form class="popup_form">
+					<span class="visually-hidden">всплывающая форма "Добавить тикет"</span>
+					<div class="popup-form-group">
+						<label class="popup-select-group">
+							<label>Краткое описание
+                                <input class="popup-text-field popup-textarea operable" name="name" >
+                            </label>
+						</label>
+					</div>
+					<div class="popup-form-group">
+						<label class="popup-select-group">
+							<label>Подробное описание
+                                <textarea class="popup-text-field popup-textarea2 operable" name="description" >
+                            </label>
+						</label>
+					</div>
+					
+                    <div style="margin-bottom: 20px;">
+                        <div class="popup-form-group">
+						    <button class="button-popup Cancel">Отмена</button>
+					    </div>
+
+					    <div class="popup-form-group">
+						    <button class="button-popup Ok">ОК</button>
+					    </div>
+                    </div>	
+				</form>
+		</div>
+	</div>
+
+    <div class="popup-wrapper display_none" id="Change_Tiket_Form"> <!-- POPUP-ФОРМА "Изменить тикет"-->
+		<div class="popup">
+			<h2 class="popup-title">Изменить тикет</h2>
+			
+				<form class="popup_form">
+					<div class="popup-form-group">
+						<label class="popup-select-group">
+							<label>Краткое описание
+                                <input class="popup-text-field popup-textarea operable" name="name" >
+                            </label>
+						</label>
+					</div>
+					<div class="popup-form-group">
+						<label class="popup-select-group">
+							<label>Подробное описание
+                                <textarea class="popup-text-field popup-textarea2 operable" name="description" >
+                            </label>
+						</label>
+					</div>
+					
+                    <div style="margin-bottom: 20px;">
+                        <div class="popup-form-group">
+						    <button class="button-popup Cancel">Отмена</button>
+					    </div>
+
+					    <div class="popup-form-group">
+						    <button class="button-popup Ok">ОК</button>
+					    </div>
+                    </div>	
+				</form>
+		</div>
+	</div>
+
+    <div class="popup-wrapper display_none" id="Delete_Tiket_Form"> <!-- POPUP-ФОРМА "Удалить тикет"-->
+		<div class="popup">
+			<h2 class="popup-title">Удалить тикет</h2>
+			
+				<form class="popup_form">
+					<span class="visually-hidden">всплывающая форма "Удалить тикет"</span>
+					<div class="popup-form-group">
+						<label class="popup-select-group">
+							<label>
+                                Вы уверены, что хотите удалить тикет? Это действие необратимо!                                
+                            </label>
+						</label>
+					</div>
+										
+                    <div style="margin-bottom: 20px;">
+                        <div class="popup-form-group">
+						    <button class="button-popup Cancel">Отмена</button>
+					    </div>
+
+					    <div class="popup-form-group">
+						    <button class="button-popup Ok">ОК</button>
+					    </div>
+                    </div>	
+				</form>
+		</div>
+	</div>
+
+</html>
