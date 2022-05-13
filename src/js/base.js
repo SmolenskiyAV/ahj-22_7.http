@@ -1,4 +1,6 @@
 /* eslint-disable linebreak-style */
+/* eslint-disable no-param-reassign */
+/* eslint-disable linebreak-style */
 /* eslint-disable no-loop-func */
 /* eslint-disable no-undef */
 /* eslint-disable linebreak-style */
@@ -11,13 +13,26 @@
 /* eslint-disable no-plusplus */
 // import {  } from './actions';
 
-export default function getParams(subscribeForm) {
-  const collection = subscribeForm.querySelectorAll('.operable');
-  const params = new URLSearchParams();
-  for (let i = 0; i < collection.length; i++) {
-    params.append(collection[i].getAttribute('name'), collection[i].innerHTML);
-    console.log('attr = ', collection[i].getAttribute('name'));
-    console.log('value = ', collection[i].innerHTML);
+export default function sendHttpRequest(xhr, method, marker, data) { // функция отправки запроса
+  xhr.open(`${method}`, `http://localhost:7070/?method=${marker}`);
+  if ((method === 'GET') && (marker === 'allTickets')) {
+    xhr.send();
   }
-  return params;
+  if ((method === 'POST') && (marker === 'createTicket')) {
+    xhr.send(data);
+  }
+  if ((method === 'POST') && (marker === 'deletTicket')) {
+    xhr.send(data);
+  }
+}
+
+export function clearFormFields(formElement) {
+  formElement.querySelector('input').value = '';
+  formElement.querySelector('textarea').value = '';
+}
+
+export function serverAnswer(xhr, answer) {
+  alert(`answer = ${answer}`);
+  console.log('xhr.response = ', xhr.response);
+  return xhr.response;
 }
