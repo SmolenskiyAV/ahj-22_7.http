@@ -167,4 +167,5 @@ app.use(async (ctx, next) => { // обработка забросов от кл�
   await next();
 });
 
-const server = http.createServer(app.callback()).listen(7070);
+const port = process.env.PORT || 7070;
+const server = http.createServer(app.callback()).listen(port);

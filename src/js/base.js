@@ -3,8 +3,10 @@
 /* eslint-disable max-len */
 /* eslint-disable no-alert */
 
+const backendURL = 'http://localhost:7070/'; // АДРЕС СЕРВЕРА
+
 export default function sendHttpRequest(xhr, method, marker, data) { // функция отправки запроса
-  xhr.open(`${method}`, `http://localhost:7070/?method=${marker}`);
+  xhr.open(`${method}`, `${backendURL}?method=${marker}`);
   if ((method === 'POST') && (marker === 'statusTicket')) {
     xhr.send(JSON.stringify(data));
   } else {
