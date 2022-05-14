@@ -11,7 +11,7 @@ export function tiketRemove(element) { // функция удаления тик
 
 export default function tiketAddFunc(tiketsList, id, status, name, created, description) { // функция ДОБАВЛЕНИЯ НОВОГО ТИКЕТА
   let doneMarker = '';
-  if (status) doneMarker = '&#10004;';
+  if (status === 'true') doneMarker = '&#10004;';
   tiketsList.insertAdjacentHTML('afterbegin', `
   <div class="task">
     <span class="visually-hidden operable" name = "id">${id}</span>

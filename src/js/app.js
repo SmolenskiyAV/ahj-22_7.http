@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => { // помещаем addEve
   const ChangeForm = document.getElementById('ChangeForm');
 
   const DeleteTiketForm = document.getElementById('Delete_Tiket_Form'); // форма "Удалить тикет"
-  const DeleteForm = document.getElementById('DeleteForm');
 
   const tiketsList = document.getElementById('tikets__list'); // список всех тикетов на странице
 
@@ -29,8 +28,13 @@ document.addEventListener('DOMContentLoaded', () => { // помещаем addEve
   // const tiketRemove = document.querySelectorAll('.tiket__remove');
 
   let resivedData = '';
-  const serverResponse = '';
   let idElement = '';
+  let currentId = '';
+  let nameElement = '';
+  let currentName = '';
+  let descriptionElement = '';
+  let currentDescription = '';
+  let editedTicket = ''; // текущий тикет, в котором производится редактирование
 
   tiketAdd.addEventListener('submit', (evt) => {
     evt.preventDefault();
@@ -49,10 +53,11 @@ document.addEventListener('DOMContentLoaded', () => { // помещаем addEve
 
   sendHttpRequest(xhr, 'GET', 'allTickets'); // запрос на сервер всего имеющегося списка тикетов (при старте страницы)
 
-  xhr.addEventListener('load', () => { // обработка принятых с сервера данных
+  xhr.addEventListener('load', () => { // ОБРАБОТКА принятых с сервера ДАННЫХ
     if (xhr.status >= 200 && xhr.status < 300) {
       try {
         let marker = xhr.getResponseHeader('X-MARKER');
+        let editData = {};
 
         if (marker === null) marker = 'not markered data';
 
@@ -79,9 +84,17 @@ document.addEventListener('DOMContentLoaded', () => { // помещаем addEve
             serverAnswer(xhr, marker);
             tiketRemove(idElement);
             return;
-            // TODO: обработка остальных методов
+          case 'status changed!': // ответ сервера "статус тикета изменён"
+            serverAnswer(xhr, marker);
+            return;
+          case 'Ticket edited!': // ответ сервера "тикета отредактирован"
+            editData = JSON.parse(xhr.response); // преобразуем в объект полученные данные
+            serverAnswer(xhr, marker);
+            editedTicket.querySelector('.tiket_text').innerHTML = editData.name; // заполняем имя тикета обновлёнными данными
+            editedTicket.querySelector('.tiket__textarea').innerHTML = editData.description; // заполняем описание тикета обновлёнными данными
+            return;
           default:
-            // ctx.response.status = 404;
+            xhr.response.status = 404;
             return;
         }
       } catch (e) {
@@ -112,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => { // помещаем addEve
 
     if (target.classList.contains('tiket__remove')) { // нажата кнопка "удалить тикет"
       idElement = target.parentElement.parentElement.previousElementSibling;
-      const currentId = idElement.textContent; // id удаляемого тикета
+      currentId = idElement.textContent; // id удаляемого тикета
       DeleteTiketForm.classList.remove('display_none');
 
       function handlerDel(event) {
@@ -128,6 +141,58 @@ document.addEventListener('DOMContentLoaded', () => { // помещаем addEve
         }
       }
       DeleteTiketForm.addEventListener('click', handlerDel);
+    }
+
+    if (target.classList.contains('tiket__done')) { // нажата кнопка "статус тикета"
+      const statusElement = target.previousElementSibling;
+      idElement = target.parentElement.parentElement.previousElementSibling;
+      currentId = idElement.textContent; // id отмечаемого тикета
+      const tiketDone = target.innerHTML;
+      if (tiketDone === '') {
+        target.innerHTML = '&#10004;';
+        statusElement.innerHTML = true;
+      } else {
+        target.innerHTML = '';
+        statusElement.innerHTML = false;
+      }
+      const statusDone = statusElement.innerHTML;
+      const statusChange = { id: currentId, status: statusDone };
+      sendHttpRequest(xhr, 'POST', 'statusTicket', statusChange);
+    }
+
+    if (target.classList.contains('tiket__change')) { // нажата кнопка "изменить тикет"
+      idElement = target.parentElement.parentElement.previousElementSibling;
+      currentId = idElement.textContent; // id изменяемого тикета
+      nameElement = target.parentElement.previousElementSibling;
+      currentName = nameElement.textContent; // имя изменяемого тикета
+      descriptionElement = target.parentElement.parentElement.nextElementSibling.firstElementChild;
+      currentDescription = descriptionElement.textContent; // описание текущего тикета
+      ChangeTiketForm.classList.remove('display_none');
+      ChangeTiketForm.querySelector('input').value = currentName;
+      ChangeTiketForm.querySelector('textarea').value = currentDescription;
+
+      function handlerEdit(event) {
+        const { target } = event;
+        if (target.classList.contains('Cancel')) { // нажата кнопка "Cancel" формы "изменить тикет"
+          ChangeTiketForm.classList.add('display_none');
+          ChangeTiketForm.removeEventListener('click', handlerEdit);
+          clearFormFields(ChangeTiketForm);
+        }
+        if (target.classList.contains('Ok')) { // нажата кнопка "Ok" формы "изменить тикет"
+          if (ChangeTiketForm.querySelector('input').value === '') {
+            alert('Заполни поле "Краткое описание"!');
+            return;
+          }
+          const formData = new FormData(ChangeForm);
+          formData.append('id', `${currentId}`);
+          sendHttpRequest(xhr, 'POST', 'editTicket', formData);
+          editedTicket = idElement.parentElement;
+          clearFormFields(ChangeTiketForm);
+          ChangeTiketForm.removeEventListener('click', handlerEdit);
+          ChangeTiketForm.classList.add('display_none');
+        }
+      }
+      ChangeTiketForm.addEventListener('click', handlerEdit);
     }
   });
 
