@@ -10,6 +10,10 @@
 
 ---
 
+[![Build status](https://ci.appveyor.com/api/projects/status/8aws2iw6c1o2ka49?svg=true)](https://ci.appveyor.com/project/SmolenskiyAV/ahj-22-7-http)
+
+https://smolenskiyav.github.io/ahj-22_7.http/
+
 ### HelpDesk
 
 #### Легенда
